@@ -1,4 +1,6 @@
 :host {
   display: block;
   border: 2px solid blue;
+  width: 400px;
+  flex: 0 0 auto;
 }

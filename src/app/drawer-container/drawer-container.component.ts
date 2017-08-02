@@ -1,5 +1,5 @@
 import { DrawerComponent } from './../drawer/drawer.component';
-import { Component, OnInit, ComponentFactoryResolver, ViewContainerRef, ComponentRef } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ViewContainerRef, ComponentRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-drawer-container',
@@ -8,29 +8,56 @@ import { Component, OnInit, ComponentFactoryResolver, ViewContainerRef, Componen
 })
 export class DrawerContainerComponent implements OnInit {
 
-  lastDrawerRef: ComponentRef<DrawerComponent>[] = [] ;
+  @ViewChild('container', {read: ViewContainerRef})
+  container: ViewContainerRef;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver,
-              private viewContainerRef: ViewContainerRef) { }
+  currentDrawerIndex = -1;
+  maxDrawerIndex = 20;
+  drawers: ComponentRef<DrawerComponent>[] = [] ;
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+
+
+  private nextDrawerIndex(): number {
+    this.currentDrawerIndex++;
+    if (this.currentDrawerIndex > this.maxDrawerIndex) {
+      this.currentDrawerIndex = 0;
+    }
+
+    return this.currentDrawerIndex;
+  }
 
   ngOnInit() {
-    for (let i = 0; i < 5; i++) {
-      const factory = this.componentFactoryResolver.resolveComponentFactory(DrawerComponent);
-    const ref = this.viewContainerRef.createComponent(factory);
-    this.lastDrawerRef.push(ref);
-    ref.changeDetectorRef.detectChanges();
-    this.viewContainerRef.detach();
-    }
+    // for (let i = 0; i < this.maxDrawerIndex + 1; i++) {
+    //   const factory = this.componentFactoryResolver.resolveComponentFactory(DrawerComponent);
+    //   const ref = this.container.createComponent(factory);
+    //   this.drawers.push(ref);
+    //   ref.changeDetectorRef.detectChanges();
+    //   this.container.detach();
+    // }
   }
-
-  addDrawer() { }
 
   removeLastDrawer() {
-    this.viewContainerRef.detach(1);
+    this.drawers[this.currentDrawerIndex].instance.hide();
+    // this.container.detach(this.currentDrawerIndex);
+    this.currentDrawerIndex--;
   }
 
-  reAddDrawer() {
-    this.viewContainerRef.insert(this.lastDrawerRef[1].hostView);
+  addDrawer() {
+    if (this.currentDrawerIndex === this.maxDrawerIndex) {
+      return;
+    }
+
+    const factory = this.componentFactoryResolver.resolveComponentFactory(DrawerComponent);
+    const ref = this.container.createComponent(factory);
+    this.drawers.push(ref);
+    ref.changeDetectorRef.detectChanges();
+    ref.instance.show();
+    this.currentDrawerIndex++;
+
+    // const index = this.nextDrawerIndex();
+    // this.container.insert(this.drawers[index].hostView);
+    // this.drawers[index].instance.show();
   }
 
 }
