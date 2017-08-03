@@ -33,6 +33,18 @@ import { trigger, state, style, animate, transition, sequence } from '@angular/a
       transition('shown => hidden', sequence([
         animate('500ms', style({ transform: 'translateX(-100%)'}))
       ]))
+    // ])
+
+    // state('hidden', style({ width: '0' })),
+      // state('shown', style({ width: 'initial' })),
+      // transition('hidden => shown', sequence([
+      //   animate('500ms', style({ opacity: '1'})),
+      //   animate('500ms')
+      // ])),
+      // transition('shown => hidden', sequence([
+      //   animate('500ms', style({ opacity: '0'})),
+      //   animate('500ms')
+      // ]))
     ])
   ]
 })
@@ -40,22 +52,22 @@ export class DrawerComponent implements OnInit {
 
   random: number;
 
-  @HostBinding('@visible')
-  state = 'hidden';
+  @HostBinding('class.open')
+  opened = false;
 
   constructor() { }
-
-  show() {
-    this.state = 'shown';
-  }
-
-  hide() {
-    this.state = 'hidden';
-  }
 
   ngOnInit() {
     this.random = Math.random();
     console.log(this.random);
+  }
+
+  open(): void {
+    this.opened = true;
+  }
+
+  close(): void {
+    this.opened = false;
   }
 
 }

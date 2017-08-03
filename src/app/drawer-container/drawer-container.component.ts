@@ -38,22 +38,27 @@ export class DrawerContainerComponent implements OnInit {
   }
 
   removeLastDrawer() {
-    this.drawers[this.currentDrawerIndex].instance.hide();
-    // this.container.detach(this.currentDrawerIndex);
-    this.currentDrawerIndex--;
+    // this.drawers[1].instance.hide();
+    // setTimeout(() => {
+    //   this.container.detach(1);
+    // }, 600);
+    // // this.currentDrawerIndex--;
   }
 
-  addDrawer() {
-    if (this.currentDrawerIndex === this.maxDrawerIndex) {
-      return;
-    }
+  addDrawer(drawer: DrawerComponent) {
 
-    const factory = this.componentFactoryResolver.resolveComponentFactory(DrawerComponent);
-    const ref = this.container.createComponent(factory);
-    this.drawers.push(ref);
-    ref.changeDetectorRef.detectChanges();
-    ref.instance.show();
-    this.currentDrawerIndex++;
+    drawer.open();
+
+    // if (this.currentDrawerIndex === this.maxDrawerIndex) {
+    //   return;
+    // }
+
+    // const factory = this.componentFactoryResolver.resolveComponentFactory(DrawerComponent);
+    // const ref = this.container.createComponent(factory);
+    // this.drawers.push(ref);
+    // ref.changeDetectorRef.detectChanges();
+    // ref.instance.show();
+    // this.currentDrawerIndex++;
 
     // const index = this.nextDrawerIndex();
     // this.container.insert(this.drawers[index].hostView);

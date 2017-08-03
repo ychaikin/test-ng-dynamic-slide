@@ -1,6 +1,14 @@
 :host {
   display: block;
   border: 2px solid blue;
-  width: 400px;
   flex: 0 0 auto;
+  background-color: green;
+  width: 0;
+  opacity: 1;
+  transition: width .7s ease;
+}
+
+:host(.open) {
+  width: initial;
+  /* opacity: 0; */
 }
