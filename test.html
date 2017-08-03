@@ -15,10 +15,21 @@
     height: 100vh;
     border: 3px solid red;
   }
+  .inner {
+    border: 3px solid green;
+    width: 200px;
+    height: 100%;
+    float: left;
+  }
+  .inner.left {
+    left: -20px;
+  }
   </style>
 </head>
 <body>
   <div class="outer">
+    <div class="inner"></div>
+    <div class="inner left"></div>
     <div class="inner"></div>
   </div>
 </body>

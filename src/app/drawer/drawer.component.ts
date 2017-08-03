@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding, AfterContentChecked, AfterContentInit, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition, sequence } from '@angular/animations';
 
 @Component({
@@ -24,15 +24,9 @@ import { trigger, state, style, animate, transition, sequence } from '@angular/a
       // transition('hidden => shown', animate('500ms')),
       // transition('shown => hidden', animate('500ms', style({ transform: 'translateX(-100%)'})))
       // transition('shown => hidden', animate('500ms'))
-      state('hidden', style({ display: 'none' })),
-      state('shown', style({ display: 'block' })),
-      transition('hidden => shown', sequence([
-        style({ transform: 'translateX(-100%)' }),
-        animate('500ms', style({ transform: 'translateX(0)'}))
-      ])),
-      transition('shown => hidden', sequence([
-        animate('500ms', style({ transform: 'translateX(-100%)'}))
-      ]))
+      state('hidden', style({ display: 'block', transform: 'translateX(-400px)' })),
+      state('shown', style({ display: 'block', transform: 'translateX(0)' })),
+      transition('hidden <=> shown', [ animate('200ms') ])
     // ])
 
     // state('hidden', style({ width: '0' })),
@@ -48,14 +42,28 @@ import { trigger, state, style, animate, transition, sequence } from '@angular/a
     ])
   ]
 })
-export class DrawerComponent implements OnInit {
+export class DrawerComponent implements OnInit, AfterContentChecked {
 
   random: number;
 
-  @HostBinding('class.open')
-  opened = false;
+  hostWidth: number;
 
-  constructor() { }
+  @HostBinding('@visible')
+  state = 'hidden';
+
+  @HostBinding('style.left')
+  hostLeft = '0';
+
+  ngAfterContentChecked(): void {
+    console.log('width in ngAfterContentChecked: ', this.hostEl.nativeElement.offsetWidth);
+
+    this.hostWidth = this.hostEl.nativeElement.offsetWidth;
+    // this.hostLeft = '-' + this.hostWidth + 'px';
+  }
+
+  constructor(private hostEl: ElementRef) {
+    console.log('width in constructor: ', hostEl.nativeElement.offsetWidth);
+  }
 
   ngOnInit() {
     this.random = Math.random();
@@ -63,11 +71,15 @@ export class DrawerComponent implements OnInit {
   }
 
   open(): void {
-    this.opened = true;
+    this.state = 'shown';
   }
 
   close(): void {
-    this.opened = false;
+    this.state = 'hidden';
+  }
+
+  moveRight(): void {
+    this.hostLeft = '200px';
   }
 
 }

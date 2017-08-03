@@ -1,7 +1,13 @@
 <!-- Components injected here  -->
-<button (click)="removeLastDrawer()">Remove Last Drawer</button>
-<button (click)="addDrawer(drawer)">Add Drawer</button>
+<button (click)="removeLastDrawer(drawer1)">Remove Drawer1</button>
+<button (click)="removeLastDrawer(drawer2)">Remove Drawer2</button>
+<button (click)="removeLastDrawer(drawer3)">Remove Drawer3</button>
+<button (click)="addDrawer(drawer1)">Add Drawer1</button>
+<button (click)="addDrawer(drawer2)">Add Drawer2</button>
+<button (click)="addDrawer(drawer3)">Add Drawer3</button>
 <div class="container">
-  <app-drawer #drawer></app-drawer>
+  <app-drawer #drawer1></app-drawer>
+  <app-drawer #drawer2></app-drawer>
+  <app-drawer #drawer3></app-drawer>
 </div>
 
