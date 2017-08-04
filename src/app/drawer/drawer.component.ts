@@ -17,48 +17,53 @@ import { trigger, state, style, animate, transition, sequence } from '@angular/a
   //     ])
   //   ])
   // ]
-  animations: [
-    trigger('visible', [
-      // state('hidden', style({ transform: 'translateX(-100%)'})),
-      // state('shown', style({ transform: 'translateX(0)'})),
-      // transition('hidden => shown', animate('500ms')),
-      // transition('shown => hidden', animate('500ms', style({ transform: 'translateX(-100%)'})))
-      // transition('shown => hidden', animate('500ms'))
-      state('hidden', style({ display: 'block', transform: 'translateX(-400px)' })),
-      state('shown', style({ display: 'block', transform: 'translateX(0)' })),
-      transition('hidden <=> shown', [ animate('200ms') ])
-    // ])
+  // animations: [
+  //   trigger('visible', [
+  //     // state('hidden', style({ transform: 'translateX(-100%)'})),
+  //     // state('shown', style({ transform: 'translateX(0)'})),
+  //     // transition('hidden => shown', animate('500ms')),
+  //     // transition('shown => hidden', animate('500ms', style({ transform: 'translateX(-100%)'})))
+  //     // transition('shown => hidden', animate('500ms'))
+  //     // state('hidden', style({ display: 'block', transform: 'translateX(-400px)' })),
+  //     // state('shown', style({ display: 'block', transform: 'translateX(0)' })),
+  //     // transition('hidden <=> shown', [ animate('200ms') ])
+  //   // ])
 
-    // state('hidden', style({ width: '0' })),
-      // state('shown', style({ width: 'initial' })),
-      // transition('hidden => shown', sequence([
-      //   animate('500ms', style({ opacity: '1'})),
-      //   animate('500ms')
-      // ])),
-      // transition('shown => hidden', sequence([
-      //   animate('500ms', style({ opacity: '0'})),
-      //   animate('500ms')
-      // ]))
-    ])
-  ]
+  //   // state('hidden', style({ width: '0' })),
+  //     // state('shown', style({ width: 'initial' })),
+  //     // transition('hidden => shown', sequence([
+  //     //   animate('500ms', style({ opacity: '1'})),
+  //     //   animate('500ms')
+  //     // ])),
+  //     // transition('shown => hidden', sequence([
+  //     //   animate('500ms', style({ opacity: '0'})),
+  //     //   animate('500ms')
+  //     // ]))
+  //   ])
+  // ]
 })
 export class DrawerComponent implements OnInit, AfterContentChecked {
 
   random: number;
 
-  hostWidth: number;
+  @HostBinding('style.width')
+  currentHostWidth: string;
 
-  @HostBinding('@visible')
-  state = 'hidden';
+  currentHostWidthSet = false;
 
-  @HostBinding('style.left')
-  hostLeft = '0';
+  originalHostWidth: string;
+
 
   ngAfterContentChecked(): void {
     console.log('width in ngAfterContentChecked: ', this.hostEl.nativeElement.offsetWidth);
 
-    this.hostWidth = this.hostEl.nativeElement.offsetWidth;
-    // this.hostLeft = '-' + this.hostWidth + 'px';
+    this.originalHostWidth = this.hostEl.nativeElement.offsetWidth;
+
+    if (!this.currentHostWidthSet) {
+      this.currentHostWidth = this.originalHostWidth;
+      this.currentHostWidthSet = true;
+    }
+    // this.currentHostWidth = this.originalHostWidth + 'px';
   }
 
   constructor(private hostEl: ElementRef) {
@@ -71,15 +76,10 @@ export class DrawerComponent implements OnInit, AfterContentChecked {
   }
 
   open(): void {
-    this.state = 'shown';
   }
 
   close(): void {
-    this.state = 'hidden';
+    console.log('closing panel');
+    this.currentHostWidth = '0';
   }
-
-  moveRight(): void {
-    this.hostLeft = '200px';
-  }
-
 }
